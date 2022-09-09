@@ -10,6 +10,7 @@ class SliderScreen extends StatefulWidget {
 
 class _SliderScreenState extends State<SliderScreen> {
   double _sliderValue = 100;
+  bool _sliderEnabled = true;
 
   @override
   Widget build(BuildContext context) {
@@ -17,30 +18,57 @@ class _SliderScreenState extends State<SliderScreen> {
       appBar: AppBar(
         title: const Text('Sliders & Checks'),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Slider.adaptive(
-              min: 50,
-              max: 400,
-              activeColor: AppTheme.primary,
-              value: _sliderValue,
-              onChanged: (value) {
-                _sliderValue = value;
-                setState(() {});
-              },
+      body: Column(
+        children: [
+          Slider.adaptive(
+            min: 50,
+            max: 400,
+            activeColor: AppTheme.primary,
+            value: _sliderValue,
+            onChanged: _sliderEnabled
+                ? (value) {
+                    _sliderValue = value;
+                    setState(() {});
+                  }
+                : null,
+          ),
+          CheckboxListTile(
+            activeColor: AppTheme.primary,
+            title:
+                _sliderEnabled ? const Text('Disable') : const Text('Enable'),
+            value: _sliderEnabled,
+            onChanged: (value) => setState(() {
+              _sliderEnabled = value ?? true;
+            }),
+          ),
+          // Switch(
+          //   activeColor: AppTheme.primary,
+          //   value: _sliderEnabled,
+          //   onChanged: (value) => setState(() {
+          //     _sliderEnabled = value;
+          //   }),
+          // ),
+          SwitchListTile(
+            activeColor: AppTheme.primary,
+            title:
+                _sliderEnabled ? const Text('Disable') : const Text('Enable'),
+            value: _sliderEnabled,
+            onChanged: (value) => setState(() {
+              _sliderEnabled = value;
+            }),
+          ),
+          const AboutListTile(),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Image(
+                width: _sliderValue,
+                fit: BoxFit.contain,
+                image:
+                    const NetworkImage('https://fondosmil.com/fondo/24595.jpg'),
+              ),
             ),
-            Image(
-              width: _sliderValue,
-              fit: BoxFit.contain,
-              image:
-                  const NetworkImage('https://fondosmil.com/fondo/24595.jpg'),
-            ),
-            const SizedBox(
-              height: 50,
-            )
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
